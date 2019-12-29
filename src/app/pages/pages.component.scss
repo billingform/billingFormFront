@@ -1,0 +1,23 @@
+.web_layout {
+    display: flex;
+}
+
+.side_bar {
+    width: 150px;
+    height: 100vh;
+}
+
+.contain＿layout {
+    width: calc(100% - 150px);
+    height: 100vh;
+}
+
+.top_bar {
+    background-color: #ECECEC;
+    height: 35px;
+}
+
+.container {
+    background-color: #FFFFFF;
+    height: 100%;
+}
