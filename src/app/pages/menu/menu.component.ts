@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +8,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MenuComponent implements OnInit {
 
-  constructor() { }
+  menuList = MenuList;
+
+  constructor(
+    private router: Router
+  ) { }
 
   ngOnInit() {
   }
 
+  clickItem(item) {
+    this.menuList.forEach(i => i.active = false);
+    item.active = true;
+    this.router.navigate([`pages/${item.path}`])
+  }
+
 }
+
+// false datas
+const MenuList = [
+  { id: 1, name: '出單功能', active: true, path: 'billing' },
+  { id: 2, name: '每月報表', active: false, path: 'monthAccounts' },
+  { id: 3, name: '年度報表', active: false, path: 'yearAccounts' },
+  { id: 4, name: '設定', active: false, path: 'setting' }
+]

@@ -1,1 +1,5 @@
-<div class="menuBox"></div>
+<div class="menuBox">
+    <div class="menuItem" *ngFor="let item of menuList" [ngClass]="{'active': item.active}" (click)="clickItem(item)">
+        {{item.name}}
+    </div>
+</div>
