@@ -9,7 +9,7 @@ import { NgxParisModule, HttpDefaultOptions, JWTOptions } from 'ngx-paris';
 import { environment } from 'src/environments/environment';
 
 export class MonitorHttpDefaultOptions extends HttpDefaultOptions {
-  baseApiURL = environment.baseApiUrl;// input api base url.
+  baseApiURL = environment['baseApiUrl'];// input api base url.
 }
 
 export class MonitorJWTOptions extends JWTOptions {
