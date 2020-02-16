@@ -8,14 +8,14 @@ import { AppComponent } from './app.component';
 import { NgxParisModule, HttpDefaultOptions, JWTOptions } from 'ngx-paris';
 import { environment } from 'src/environments/environment';
 
-// export class MonitorHttpDefaultOptions extends HttpDefaultOptions {
-//   baseApiURL = environment['baseApiUrl'];
-//   // input api base url.
-// }
+export class MonitorHttpDefaultOptions extends HttpDefaultOptions {
+  baseApiURL = environment['baseApiUrl'];
+  // input api base url.
+}
 
-// export class MonitorJWTOptions extends JWTOptions {
-//   key = 'user';
-// }
+export class MonitorJWTOptions extends JWTOptions {
+  key = 'user';
+}
 
 @NgModule({
   declarations: [
@@ -27,14 +27,14 @@ import { environment } from 'src/environments/environment';
     NgxParisModule,
     NgbModule
   ],
-  // providers: [{
-  //   provide: HttpDefaultOptions,
-  //   useClass: MonitorHttpDefaultOptions
-  // },
-  // {
-  //   provide: JWTOptions,
-  //   useClass: MonitorJWTOptions
-  // }],
+  providers: [{
+    provide: HttpDefaultOptions,
+    useClass: MonitorHttpDefaultOptions
+  },
+  {
+    provide: JWTOptions,
+    useClass: MonitorJWTOptions
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
