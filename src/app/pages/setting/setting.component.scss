@@ -1,0 +1,55 @@
+/**
+ * Tabs
+ */
+ .tabs {
+	display: flex;
+    flex-wrap: wrap; // make sure it wraps
+    margin-top: 20px;
+}
+.tabs label {
+	order: 1; // Put the labels first
+	display: block;
+	padding: 1rem 2rem;
+	margin-right: 0.2rem;
+	cursor: pointer;
+    background: #333b48;
+    font-weight: bold;
+    margin-bottom: 0px;
+    color: #FFF;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    &:hover {
+        background: #515a68;
+    }
+}
+.tabs .tab {
+  order: 99; // Put the tabs last
+  flex-grow: 1;
+  width: 100%;
+  display: none;
+  padding: 1rem;
+  background: #ECECEC;
+}
+.tabs input[type="radio"] {
+	display: none;
+}
+.tabs input[type="radio"]:checked + label {
+    background: #ECECEC;
+    color: black;
+}
+.tabs input[type="radio"]:checked + label + .tab {
+	display: block;
+}
+
+@media (max-width: 45em) {
+  .tabs .tab,
+  .tabs label {
+    order: initial;
+  }
+  .tabs label {
+    width: 100%;
+    margin-right: 0;
+    margin-top: 0.2rem;
+  }
+}
+

@@ -1,3 +1,4 @@
+import { MenuService } from './../../services/menu.service';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
@@ -11,10 +12,12 @@ export class MenuComponent implements OnInit {
   menuList = MenuList;
 
   constructor(
-    private router: Router
+    private router: Router,
+    private menuService: MenuService
   ) { }
 
   ngOnInit() {
+    // this.getMenuList();
   }
 
   clickItem(item) {
@@ -23,6 +26,11 @@ export class MenuComponent implements OnInit {
     this.router.navigate([`pages/${item.path}`])
   }
 
+  getMenuList(){
+    this.menuService.getMenu().subscribe(resp => {
+      console.log(resp);
+    });
+  }
 }
 
 // false datas
