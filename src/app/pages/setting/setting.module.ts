@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { SettingRoutingModule } from './setting-routing.module';
 import { SettingComponent } from './setting.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
+import {TabViewModule} from 'primeng/tabview';
 
 
 @NgModule({
@@ -11,6 +12,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
   imports: [
     CommonModule,
     SettingRoutingModule,
+    FormsModule,
+    TabViewModule
   ]
 })
 export class SettingModule { }
