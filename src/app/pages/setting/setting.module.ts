@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { SettingRoutingModule } from './setting-routing.module';
 import { SettingComponent } from './setting.component';
 import { FormsModule } from '@angular/forms';
-import { CommonComponentModule } from 'src/app/common/common-component.module';
+import {TabViewModule} from 'primeng/tabview';
 
 
 @NgModule({
@@ -13,7 +13,7 @@ import { CommonComponentModule } from 'src/app/common/common-component.module';
     CommonModule,
     SettingRoutingModule,
     FormsModule,
-    CommonComponentModule
+    TabViewModule
   ]
 })
 export class SettingModule { }
