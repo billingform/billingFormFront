@@ -9,10 +9,10 @@ const routes: Routes = [
     path: '', component: PagesComponent,
     children: [
       { path: '', redirectTo: 'billing', pathMatch: 'full' },
-      { path: 'billing', loadChildren: './billing/billing.module#BillingModule' },
-      { path: 'setting', loadChildren: './setting/setting.module#SettingModule' },
-      { path: 'monthAccounts', loadChildren: './month-accounts/month-accounts.module#MonthAccountsModule' },
-      { path: 'yearAccounts', loadChildren: './year-accounts/year-accounts.module#YearAccountsModule' },
+      { path: 'billing', loadChildren: () => import('./billing/billing.module').then(m => m.BillingModule) },
+      { path: 'setting', loadChildren: () => import('./setting/setting.module').then(m => m.SettingModule) },
+      { path: 'monthAccounts', loadChildren: () => import('./month-accounts/month-accounts.module').then(m => m.MonthAccountsModule) },
+      { path: 'yearAccounts', loadChildren: () => import('./year-accounts/year-accounts.module').then(m => m.YearAccountsModule) },
     ]
   }
 ];

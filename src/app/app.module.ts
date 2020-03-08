@@ -1,6 +1,6 @@
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, Injectable } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -8,11 +8,13 @@ import { AppComponent } from './app.component';
 import { NgxParisModule, HttpDefaultOptions, JWTOptions } from 'ngx-paris';
 import { environment } from 'src/environments/environment';
 
+@Injectable()
 export class MonitorHttpDefaultOptions extends HttpDefaultOptions {
   baseApiURL = environment['baseApiUrl'];
   // input api base url.
 }
 
+@Injectable()
 export class MonitorJWTOptions extends JWTOptions {
   key = 'user';
 }
