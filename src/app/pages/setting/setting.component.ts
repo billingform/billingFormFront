@@ -6,108 +6,65 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./setting.component.scss']
 })
 export class SettingComponent implements OnInit {
-  constructor() { }
+
+  cars: Car[];
+  cols: any[];
+  selectedCar: Car;
+  brands = [];
+  colors = [];
+
+  constructor() {
+  }
 
   ngOnInit() {
+    this.cars = [
+      { "brand": "VW", "year": 2012, "color": "Orange", "vin": "dsad231ff" },
+      { "brand": "Audi", "year": 2011, "color": "Black", "vin": "gwregre345" },
+      { "brand": "Renault", "year": 2005, "color": "Gray", "vin": "h354htr" },
+      { "brand": "BMW", "year": 2003, "color": "Blue", "vin": "j6w54qgh" },
+      { "brand": "Mercedes", "year": 1995, "color": "Orange", "vin": "hrtwy34" },
+      { "brand": "Volvo", "year": 2005, "color": "Black", "vin": "jejtyj" },
+      { "brand": "Honda", "year": 2012, "color": "Yellow", "vin": "g43gr" },
+      { "brand": "Jaguar", "year": 2013, "color": "Orange", "vin": "greg34" },
+      { "brand": "Ford", "year": 2000, "color": "Black", "vin": "h54hw5" },
+      { "brand": "Fiat", "year": 2013, "color": "Red", "vin": "245t2s" }
+    ]
+    this.cols = [
+      { field: 'vin', header: 'Vin' },
+      { field: 'year', header: 'Year' },
+      { field: 'brand', header: 'Brand' },
+      { field: 'color', header: 'Color' }
+    ];
+
+    this.brands = [
+      { label: 'Audi', value: 'Audi' },
+      { label: 'BMW', value: 'BMW' },
+      { label: 'Fiat', value: 'Fiat' },
+      { label: 'Honda', value: 'Honda' },
+      { label: 'Jaguar', value: 'Jaguar' },
+      { label: 'Mercedes', value: 'Mercedes' },
+      { label: 'Renault', value: 'Renault' },
+      { label: 'VW', value: 'VW' },
+      { label: 'Volvo', value: 'Volvo' }
+    ];
+
+    this.colors = [
+      { label: 'White', value: 'White' },
+      { label: 'Green', value: 'Green' },
+      { label: 'Silver', value: 'Silver' },
+      { label: 'Black', value: 'Black' },
+      { label: 'Red', value: 'Red' },
+      { label: 'Maroon', value: 'Maroon' },
+      { label: 'Brown', value: 'Brown' },
+      { label: 'Orange', value: 'Orange' },
+      { label: 'Blue', value: 'Blue' }
+    ];
   }
-
-  page = 1;
-  pageSize = 4;
-  collectionSize = COUNTRIES.length;
-
-  get countries(): Country[] {
-    return COUNTRIES
-      .map((country, i) => ({id: i + 1, ...country}))
-      .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
-  }
-
 }
 
-interface Country {
-  id?: number;
-  name: string;
-  flag: string;
-  area: number;
-  population: number;
+interface Car {
+  vin;
+  year;
+  brand;
+  color;
 }
-
-const COUNTRIES: Country[] = [
-  {
-    name: 'Russia',
-    flag: 'f/f3/Flag_of_Russia.svg',
-    area: 17075200,
-    population: 146989754
-  },
-  {
-    name: 'France',
-    flag: 'c/c3/Flag_of_France.svg',
-    area: 640679,
-    population: 64979548
-  },
-  {
-    name: 'Germany',
-    flag: 'b/ba/Flag_of_Germany.svg',
-    area: 357114,
-    population: 82114224
-  },
-  {
-    name: 'Portugal',
-    flag: '5/5c/Flag_of_Portugal.svg',
-    area: 92090,
-    population: 10329506
-  },
-  {
-    name: 'Canada',
-    flag: 'c/cf/Flag_of_Canada.svg',
-    area: 9976140,
-    population: 36624199
-  },
-  {
-    name: 'Vietnam',
-    flag: '2/21/Flag_of_Vietnam.svg',
-    area: 331212,
-    population: 95540800
-  },
-  {
-    name: 'Brazil',
-    flag: '0/05/Flag_of_Brazil.svg',
-    area: 8515767,
-    population: 209288278
-  },
-  {
-    name: 'Mexico',
-    flag: 'f/fc/Flag_of_Mexico.svg',
-    area: 1964375,
-    population: 129163276
-  },
-  {
-    name: 'United States',
-    flag: 'a/a4/Flag_of_the_United_States.svg',
-    area: 9629091,
-    population: 324459463
-  },
-  {
-    name: 'India',
-    flag: '4/41/Flag_of_India.svg',
-    area: 3287263,
-    population: 1324171354
-  },
-  {
-    name: 'Indonesia',
-    flag: '9/9f/Flag_of_Indonesia.svg',
-    area: 1910931,
-    population: 263991379
-  },
-  {
-    name: 'Tuvalu',
-    flag: '3/38/Flag_of_Tuvalu.svg',
-    area: 26,
-    population: 11097
-  },
-  {
-    name: 'China',
-    flag: 'f/fa/Flag_of_the_People%27s_Republic_of_China.svg',
-    area: 9596960,
-    population: 1409517397
-  }
-];

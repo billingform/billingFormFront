@@ -10,7 +10,8 @@ export class MenuService extends BaseService {
     super(http, options);
   }
 
-  getMenu(){
+  getMenu() {
     return this.get('getMenus')
   }
+
 }

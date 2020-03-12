@@ -4,7 +4,63 @@
     </p-tabPanel>
     <p-tabPanel header="Header 2">
         <ng-template pTemplate="content">
-            Complex Content to Lazy Load
+            <p-table #dt [columns]="cols" styleClass="ui-table-cars" [value]="cars" [paginator]="true" [rows]="10"
+                dataKey="vin" selectionMode="single" [(selection)]="selectedCar">
+                <ng-template pTemplate="caption">
+                    List of Cars
+                    <div class="ui-table-globalfilter-container">
+                        <input type="text" pInputText size="50" placeholder="Global Filter"
+                            (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:250px;">
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngSwitch]="col.field">
+                            {{col.header}}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                            <input *ngSwitchCase="'vin'" pInputText type="text" placeholder="Starts with"
+                                class="ui-column-filter" style="width: 100%;"
+                                (input)="dt.filter($event.target.value, col.field, 'startsWith')">
+                            <input *ngSwitchCase="'year'" pInputText type="text" placeholder="Contains"
+                                class="ui-column-filter" style="width: 100%;"
+                                (input)="dt.filter($event.target.value, col.field, 'contains')">
+                            <p-dropdown *ngSwitchCase="'brand'" [options]="brands" styleClass="ui-column-filter"
+                                [showClear]="true" [style]="{'width':'100%'}" placeholder="Select a Brand"
+                                (onChange)="dt.filter($event.value, col.field, 'equals')">
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                                </ng-template>
+                                <ng-template let-car pTemplate="item">
+                                    <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                                        <div style="font-size:14px;float:right;margin-top:4px">{{car.label}}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                            <p-multiSelect *ngSwitchCase="'color'" [options]="colors" [filter]="false"
+                                styleClass="ui-column-filter" [style]="{'width':'100%'}" defaultLabel="Select a color"
+                                (onChange)="dt.filter($event.value, col.field, 'in')"></p-multiSelect>
+                        </th>
+                        <th style="width: 8em; text-align: center;">
+                            <button pButton type="button" icon="pi pi-cog"></button>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData" [pEditableRow]="rowData">
+                        <td>{{rowData.vin}}</td>
+                        <td>{{rowData.year}}</td>
+                        <td>
+                            {{rowData.brand}}
+                        </td>
+                        <td>{{rowData.color}}</td>
+                        <td>
+                            <button pButton type="button" class="ui-button-success" icon="pi pi-search"
+                                style="margin-right: .5em"></button>
+                            <button pButton type="button" class="ui-button-warning" icon="pi pi-pencil"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </ng-template>
     </p-tabPanel>
     <p-tabPanel header="Header 3">
