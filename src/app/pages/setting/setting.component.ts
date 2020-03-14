@@ -12,6 +12,7 @@ export class SettingComponent implements OnInit {
   selectedCar: Car;
   brands = [];
   colors = [];
+  isEdit = false;
 
   constructor() {
   }
