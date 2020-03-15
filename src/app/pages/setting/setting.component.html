@@ -1,11 +1,15 @@
-<p-tabView>
+<p-tabView (onChange)="handleChange($event)">
     <p-tabPanel header="Header 1">
-        Content 1
+        <ng-template pTemplate="content">
+            <div *ngIf="tabPageNum === 0">
+                Content 1
+            </div>
+        </ng-template>
     </p-tabPanel>
     <p-tabPanel header="Header 2">
         <ng-template pTemplate="content">
             <p-table #dt [columns]="cols" styleClass="ui-table-cars" [value]="cars" [paginator]="true" [rows]="10"
-                dataKey="vin" selectionMode="single" [(selection)]="selectedCar" *ngIf="!isEdit">
+                dataKey="vin" selectionMode="single" [(selection)]="selectedCar" *ngIf="!isEdit && tabPageNum === 1">
                 <ng-template pTemplate="caption">
                     List of Cars
                     <div class="ui-table-globalfilter-container">
@@ -59,17 +63,18 @@
             </p-table>
         </ng-template>
     </p-tabPanel>
-    <p-table [value]="cars" *ngIf="isEdit" styleClass="ui-table-cars">
+    <p-table #dt [columns]="cols" [value]="cars" *ngIf="isEdit && tabPageNum === 1" styleClass="ui-table-cars"
+        [paginator]="true" [rows]="10">
         <ng-template pTemplate="caption">
             List of Cars
-            <!-- <div class="ui-table-globalfilter-container">
+            <div class="ui-table-globalfilter-container">
                 <input type="text" pInputText size="50" placeholder="Global Filter"
                     (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:250px;">
-            </div> -->
+            </div>
         </ng-template>
-        <ng-template pTemplate="header">
+        <ng-template pTemplate="header" let-columns>
             <tr>
-                <th *ngFor="let col of cols">
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngSwitch]="col.field">
                     {{col.header}}
                     <p-sortIcon [field]="col.field"></p-sortIcon>
                 </th>
@@ -129,7 +134,9 @@
     </p-table>
     <p-tabPanel header="Header 3">
         <ng-template pTemplate="content">
-            Complex Content to Lazy Load
+            <div *ngIf="tabPageNum === 2">
+                Complex Content to Lazy Load
+            </div>
         </ng-template>
     </p-tabPanel>
 </p-tabView>
