@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseApiUrl: ''
+  baseApiUrl: 'https://us-central1-a-billing-form.cloudfunctions.net/api/'
 };
 
 /*
