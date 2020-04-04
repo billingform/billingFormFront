@@ -1,6 +1,7 @@
 import { MenuService } from './../../services/menu.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { MenuInfo } from './menu.model';
 
 @Component({
   selector: 'app-menu',
@@ -9,10 +10,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MenuComponent implements OnInit {
 
-  menuList = MenuList;
+  menuList: MenuInfo[];
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private menuService: MenuService
   ) { }
 
@@ -23,20 +25,14 @@ export class MenuComponent implements OnInit {
   clickItem(item) {
     this.menuList.forEach(i => i.active = false);
     item.active = true;
-    this.router.navigate([`pages/${item.path}`])
+    this.router.navigate([`pages/${item.url}`])
   }
 
-  getMenuList(){
-    this.menuService.getMenu().subscribe(resp => {
-      console.log(resp);
+  getMenuList() {
+    this.menuService.getMenu().subscribe((resp: MenuInfo[]) => {
+      this.menuList = resp;
+      const pathName = this.router.url.split("/")[2];
+      this.menuList.find(i => i.url === pathName).active = true;
     });
   }
 }
-
-// false datas
-const MenuList = [
-  { id: 1, name: '出單功能', active: true, path: 'billing' },
-  { id: 2, name: '每月報表', active: false, path: 'monthAccounts' },
-  { id: 3, name: '年度報表', active: false, path: 'yearAccounts' },
-  { id: 4, name: '設定', active: false, path: 'setting' }
-]

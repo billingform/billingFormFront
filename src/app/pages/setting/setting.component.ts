@@ -1,24 +1,77 @@
-import { Component, OnInit } from '@angular/core';
+import { SettingService } from './../../services/setting.service';
+import { Component, OnInit, OnDestroy, AfterContentChecked } from '@angular/core';
+import { ColsTab0, ColsTab0Items } from './setting.model';
 
 @Component({
   selector: 'app-setting',
   templateUrl: './setting.component.html',
   styleUrls: ['./setting.component.scss']
 })
-export class SettingComponent implements OnInit {
+export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy {
 
-  cars: Car[];
-  cols: any[];
-  selectedCar: Car;
-  brands = [];
-  colors = [];
+  selected: any;
   isEdit = false;
   tabPageNum = 0;
 
-  constructor() {
+  // Tab0
+  colsTab0Items: ColsTab0Items[];
+  colsTab0 = ColsTab0;
+  colsTab0Input = {
+    name: '',
+    unit: '',
+    amount: '',
+    remark: ''
+  }
+  colsTab0CreateBtn = false;
+
+  // Tab2
+  cars: Car[];
+  cols: any[];
+  brands = [];
+  colors = [];
+
+  constructor(
+    private settingService: SettingService
+  ) {
   }
 
   ngOnInit() {
+    this.changesTab(0);
+  }
+
+  ngAfterContentChecked() {
+    this.colsTab0CreateBtn = !!this.colsTab0Input.name && !!this.colsTab0Input.unit
+      && !!parseInt(this.colsTab0Input.amount);
+  }
+
+  ngOnDestroy() {
+    // todo Execute after leaving (save or cencal)
+  }
+
+  handleChange($event) {
+    this.tabPageNum = $event.index;
+    this.changesTab(this.tabPageNum);
+  }
+
+  changesTab(pageNum) {
+    switch (pageNum) {
+      case pageNum === 1:
+        this.getFalseTabData();
+        break;
+
+      default:
+        this.getItems();
+        break;
+    }
+  }
+
+  getItems() {
+    this.settingService.getItem().subscribe((resp: ColsTab0Items[]) => {
+      this.colsTab0Items = resp;
+    })
+  }
+
+  getFalseTabData() {
     this.cars = [
       { "brand": "VW", "year": 2012, "color": "Orange", "vin": "dsad231ff" },
       { "brand": "Audi", "year": 2011, "color": "Black", "vin": "gwregre345" },
@@ -41,6 +94,7 @@ export class SettingComponent implements OnInit {
       { "brand": "Ford", "year": 2000, "color": "Black", "vin": "h54hw5" },
       { "brand": "Fiat", "year": 2013, "color": "Red", "vin": "245t2s" }
     ]
+
     this.cols = [
       { field: 'vin', header: 'Vin' },
       { field: 'year', header: 'Year' },
@@ -71,10 +125,6 @@ export class SettingComponent implements OnInit {
       { label: 'Orange', value: 'Orange' },
       { label: 'Blue', value: 'Blue' }
     ];
-  }
-
-  handleChange($event){
-    this.tabPageNum = $event.index;
   }
 }
 
