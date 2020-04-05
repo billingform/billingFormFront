@@ -15,6 +15,7 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
 
   // Tab0
   colsTab0Items: ColsTab0Items[];
+  colsTab0ItemsDefault: ColsTab0Items[];
   colsTab0 = ColsTab0;
   colsTab0Input = {
     name: '',
@@ -54,13 +55,12 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
   }
 
   changesTab(pageNum) {
-    switch (pageNum) {
+    switch (pageNum >= 0) {
+      case pageNum === 0:
+        this.getItems();
+        break;
       case pageNum === 1:
         this.getFalseTabData();
-        break;
-
-      default:
-        this.getItems();
         break;
     }
   }
@@ -68,10 +68,58 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
   getItems() {
     this.settingService.getItem().subscribe((resp: ColsTab0Items[]) => {
       this.colsTab0Items = resp;
+      this.colsTab0ItemsDefault = JSON.parse(JSON.stringify(this.colsTab0Items));
     })
   }
 
+  setItems(active) {
+    // Create: C, Save: S
+
+    if (active === 'C') {
+      const obj = {
+        isUpdate: true,
+        name: this.colsTab0Input.name,
+        unit: this.colsTab0Input.unit,
+        amount: parseInt(this.colsTab0Input.amount),
+        remark: this.colsTab0Input.remark
+      }
+      this.colsTab0Items.unshift(obj);
+      this.colsTab0ItemsDefault = JSON.parse(JSON.stringify(this.colsTab0Items));
+    }
+
+    const colsTab0ItemsObj = JSON.parse(JSON.stringify(this.colsTab0Items));
+    colsTab0ItemsObj.forEach(i => i.isUpdate = false);
+    const items = { items: colsTab0ItemsObj }
+
+    this.settingService.setItem(items).subscribe(resp => {
+      this.colsTab0Input = {
+        name: '',
+        unit: '',
+        amount: '',
+        remark: ''
+      };
+      const cols = ['isUpdate', 'name', 'unit', 'amount', 'remark'];
+      this.comparisonUpdateData(this.colsTab0ItemsDefault, this.colsTab0Items, cols);
+      this.isEdit = false;
+    });
+  }
+
+  deleteItems(data) {
+    const index = this.colsTab0Items.findIndex(i => i.name === data.name);
+    this.colsTab0Items.splice(index, 1)
+    this.colsTab0ItemsDefault = JSON.parse(JSON.stringify(this.colsTab0Items));
+  }
+
+  private comparisonUpdateData(oldData, newData, cols) {
+    newData.forEach((item, index) => {
+      cols.forEach(col => {
+        if (oldData[index][col] !== newData[index][col]) { item.isUpdate = true; };
+      });
+    });
+  }
+
   getFalseTabData() {
+    // false data
     this.cars = [
       { "brand": "VW", "year": 2012, "color": "Orange", "vin": "dsad231ff" },
       { "brand": "Audi", "year": 2011, "color": "Black", "vin": "gwregre345" },
