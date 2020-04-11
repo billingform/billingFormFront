@@ -1,6 +1,10 @@
 import { SettingService } from './../../services/setting.service';
 import { Component, OnInit, OnDestroy, AfterContentChecked } from '@angular/core';
-import { ColsTab0, ColsTab0Items } from './setting.model';
+import { ColsTab0, ColsTab0Items, ColTab0 } from './setting.model';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { SnackbarService } from 'ngx-snackbar';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmPopupComponent } from '../common/confirm-popup/confirm-popup.component';
 
 @Component({
   selector: 'app-setting',
@@ -16,14 +20,16 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
   // Tab0
   colsTab0Items: ColsTab0Items[];
   colsTab0ItemsDefault: ColsTab0Items[];
+  colsTab0CreateBtn = false;
   colsTab0 = ColsTab0;
+  colTab0 = ColTab0;
   colsTab0Input = {
     name: '',
     unit: '',
     amount: '',
     remark: ''
   }
-  colsTab0CreateBtn = false;
+
 
   // Tab2
   cars: Car[];
@@ -32,7 +38,10 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
   colors = [];
 
   constructor(
-    private settingService: SettingService
+    private settingService: SettingService,
+    private spinner: NgxSpinnerService,
+    private snackbarService: SnackbarService,
+    private modalService: NgbModal
   ) {
   }
 
@@ -46,10 +55,14 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
   }
 
   ngOnDestroy() {
-    // todo Execute after leaving (save or cencal)
+    if (this.leaveTabsStutas(this.tabPageNum)) {
+      this.openPopup(this.tabPageNum)
+    }
   }
 
   handleChange($event) {
+    this.leaveTabsStutas(this.tabPageNum) ?
+      this.openPopup(this.tabPageNum) : this.isEdit = false;
     this.tabPageNum = $event.index;
     this.changesTab(this.tabPageNum);
   }
@@ -65,16 +78,39 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
     }
   }
 
+  saveTab(pageNum) {
+    switch (pageNum >= 0) {
+      case pageNum === 0:
+        this.setItems('S');
+        break;
+      case pageNum === 1:
+
+        break;
+    }
+  }
+
+  leaveTabsStutas(pageNum) {
+    switch (pageNum >= 0) {
+      case pageNum === 0:
+        this.comparisonUpdateData(this.colsTab0ItemsDefault, this.colsTab0Items, this.colTab0);
+        return this.isEdit && !this.colsTab0Items.every(i => i.isUpdate === false)
+      case pageNum === 1:
+
+        break;
+    }
+  }
+
   getItems() {
+    this.spinner.show();
     this.settingService.getItem().subscribe((resp: ColsTab0Items[]) => {
       this.colsTab0Items = resp;
       this.colsTab0ItemsDefault = JSON.parse(JSON.stringify(this.colsTab0Items));
+      this.spinner.hide();
     })
   }
 
   setItems(active) {
     // Create: C, Save: S
-
     if (active === 'C') {
       const obj = {
         isUpdate: true,
@@ -87,27 +123,61 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
       this.colsTab0ItemsDefault = JSON.parse(JSON.stringify(this.colsTab0Items));
     }
 
-    const colsTab0ItemsObj = JSON.parse(JSON.stringify(this.colsTab0Items));
-    colsTab0ItemsObj.forEach(i => i.isUpdate = false);
-    const items = { items: colsTab0ItemsObj }
+    // 比對找出更新的資料
+    this.comparisonUpdateData(this.colsTab0ItemsDefault, this.colsTab0Items, this.colTab0);
 
-    this.settingService.setItem(items).subscribe(resp => {
-      this.colsTab0Input = {
-        name: '',
-        unit: '',
-        amount: '',
-        remark: ''
-      };
-      const cols = ['isUpdate', 'name', 'unit', 'amount', 'remark'];
-      this.comparisonUpdateData(this.colsTab0ItemsDefault, this.colsTab0Items, cols);
+    // 判斷是否有編輯過
+    if (!this.colsTab0Items.every(i => i.isUpdate === false)) {
+      this.spinner.show();
+      const colsTab0ItemsObj = JSON.parse(JSON.stringify(this.colsTab0Items));
+      colsTab0ItemsObj.forEach(i => i.isUpdate = false);
+      const items = { items: colsTab0ItemsObj }
+      this.settingService.setItem(items).subscribe(resp => {
+        this.colsTab0Input = {
+          name: '',
+          unit: '',
+          amount: '',
+          remark: ''
+        };
+        this.spinner.hide();
+        this.openSnackbar('存擋/新增 成功');
+        this.isEdit = false;
+      }, error => this.openSnackbar('存擋/新增 失敗'));
+    } else {
       this.isEdit = false;
-    });
+    }
   }
 
   deleteItems(data) {
     const index = this.colsTab0Items.findIndex(i => i.name === data.name);
     this.colsTab0Items.splice(index, 1)
     this.colsTab0ItemsDefault = JSON.parse(JSON.stringify(this.colsTab0Items));
+  }
+
+  openPopup(pageNum) {
+    const modalRef = this.modalService.open(ConfirmPopupComponent);
+    modalRef.componentInstance.content = '您尚未存擋，是否要存擋！！';
+    modalRef.componentInstance.closeBtn.subscribe(resp => this.isEdit = false);
+    modalRef.componentInstance.saveBtn.subscribe(resp => this.saveTab(pageNum));
+  }
+
+  openSnackbar(text: string) {
+    this.snackbarService.add({
+      msg: `<strong>${text}</strong>`,
+      timeout: 5000,
+      action: {
+        text: '',
+        onClick: (snack) => {
+          console.log('dismissed: ' + snack.id);
+        },
+      },
+      // onAdd: (snack) => {
+      //   console.log('added: ' + snack.id);
+      // },
+      // onRemove: (snack) => {
+      //   console.log('removed: ' + snack.id);
+      // }
+    });
   }
 
   private comparisonUpdateData(oldData, newData, cols) {

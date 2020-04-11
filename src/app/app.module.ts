@@ -8,6 +8,8 @@ import { AppComponent } from './app.component';
 
 import { NgxParisModule, HttpDefaultOptions, JWTOptions } from 'ngx-paris';
 import { environment } from 'src/environments/environment';
+import { NgxSpinnerModule } from "ngx-spinner";
+import {SnackbarModule} from 'ngx-snackbar';
 
 @Injectable()
 export class MonitorHttpDefaultOptions extends HttpDefaultOptions {
@@ -29,7 +31,9 @@ export class MonitorJWTOptions extends JWTOptions {
     BrowserAnimationsModule,
     AppRoutingModule,
     NgxParisModule,
-    NgbModule
+    NgbModule,
+    NgxSpinnerModule,
+    SnackbarModule.forRoot()
   ],
   providers: [{
     provide: HttpDefaultOptions,

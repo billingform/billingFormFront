@@ -27,6 +27,8 @@
     "chart.js": "^3.0.0-alpha",
     "express": "^4.17.1",
     "ngx-paris": "0.0.8",
+    "ngx-snackbar": "^2.0.1",
+    "ngx-spinner": "^9.0.2",
     "nodemon": "^2.0.2",
     "primeicons": "^2.0.0",
     "primeng": "^9.0.0",

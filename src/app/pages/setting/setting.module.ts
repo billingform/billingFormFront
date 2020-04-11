@@ -1,3 +1,4 @@
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -8,6 +9,8 @@ import { TabViewModule } from 'primeng/tabview';
 import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { SnackbarModule } from 'ngx-snackbar';
 
 
 @NgModule({
@@ -20,6 +23,9 @@ import { MultiSelectModule } from 'primeng/multiselect';
     TableModule,
     DropdownModule,
     MultiSelectModule,
+    NgxSpinnerModule,
+    SnackbarModule,
+    NgbModule
   ],
 })
 export class SettingModule { }

@@ -1,4 +1,6 @@
 <p-tabView (onChange)="handleChange($event)">
+    <ngx-spinner type="ball-beat" size="medium" bdColor="rgba(255,255,255, .5)" color="#23AAEE"
+    [fullScreen]="false"></ngx-spinner>
     <p-tabPanel header="項目設定">
         <ng-template pTemplate="content">
             <p-table #dt [columns]="colsTab0" styleClass="ui-table-cars" [value]="colsTab0Items" [paginator]="true"
@@ -260,3 +262,4 @@
         </ng-template>
     </p-tabPanel>
 </p-tabView>
+<ngx-snackbar></ngx-snackbar>
