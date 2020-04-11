@@ -53,7 +53,7 @@
             <p-table #dt [columns]="colsTab0" [value]="colsTab0Items" *ngIf="isEdit && tabPageNum === 0"
                 styleClass="ui-table-cars" [paginator]="true" [rows]="10">
                 <ng-template pTemplate="caption">
-                    設定項目編輯
+                    <span class="backPage" (click)="backPage(0)"> < </span>設定項目編輯
                     <div class="ui-table-globalfilter-container">
                         <input type="text" pInputText size="50" placeholder="Global Filter"
                             (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:250px;">

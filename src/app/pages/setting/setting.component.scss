@@ -35,3 +35,7 @@
     border: 0 none;
     padding: 1em;
 }
+
+::ng-deep p-table .backPage{
+    cursor: pointer;
+}

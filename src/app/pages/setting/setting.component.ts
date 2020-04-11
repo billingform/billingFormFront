@@ -21,6 +21,7 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
   colsTab0Items: ColsTab0Items[];
   colsTab0ItemsDefault: ColsTab0Items[];
   colsTab0CreateBtn = false;
+  isDelete = false;
   colsTab0 = ColsTab0;
   colTab0 = ColTab0;
   colsTab0Input = {
@@ -67,6 +68,10 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
     this.changesTab(this.tabPageNum);
   }
 
+  backPage(pageNum){
+    this.changesTab(pageNum);
+  }
+
   changesTab(pageNum) {
     switch (pageNum >= 0) {
       case pageNum === 0:
@@ -93,7 +98,7 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
     switch (pageNum >= 0) {
       case pageNum === 0:
         this.comparisonUpdateData(this.colsTab0ItemsDefault, this.colsTab0Items, this.colTab0);
-        return this.isEdit && !this.colsTab0Items.every(i => i.isUpdate === false)
+        return (this.isEdit && !this.colsTab0Items.every(i => i.isUpdate === false)) || this.isDelete
       case pageNum === 1:
 
         break;
@@ -105,6 +110,8 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
     this.settingService.getItem().subscribe((resp: ColsTab0Items[]) => {
       this.colsTab0Items = resp;
       this.colsTab0ItemsDefault = JSON.parse(JSON.stringify(this.colsTab0Items));
+      this.isEdit = false;
+      this.isDelete = false;
       this.spinner.hide();
     })
   }
@@ -127,7 +134,7 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
     this.comparisonUpdateData(this.colsTab0ItemsDefault, this.colsTab0Items, this.colTab0);
 
     // 判斷是否有編輯過
-    if (!this.colsTab0Items.every(i => i.isUpdate === false)) {
+    if (!this.colsTab0Items.every(i => i.isUpdate === false) || this.isDelete) {
       this.spinner.show();
       const colsTab0ItemsObj = JSON.parse(JSON.stringify(this.colsTab0Items));
       colsTab0ItemsObj.forEach(i => i.isUpdate = false);
@@ -142,9 +149,11 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
         this.spinner.hide();
         this.openSnackbar('存擋/新增 成功');
         this.isEdit = false;
+        this.isDelete = false;
       }, error => this.openSnackbar('存擋/新增 失敗'));
     } else {
       this.isEdit = false;
+      this.isDelete = false;
     }
   }
 
@@ -152,6 +161,7 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
     const index = this.colsTab0Items.findIndex(i => i.name === data.name);
     this.colsTab0Items.splice(index, 1)
     this.colsTab0ItemsDefault = JSON.parse(JSON.stringify(this.colsTab0Items));
+    this.isDelete  = true;
   }
 
   openPopup(pageNum) {
