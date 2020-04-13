@@ -256,7 +256,7 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
   }
 }
 
-interface Car {
+export interface Car {
   vin;
   year;
   brand;
