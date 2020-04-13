@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseApiUrl: 'https://billing-form-backend.herokuapp.com/'
+  baseApiUrl: 'https://us-central1-a-billing-form.cloudfunctions.net/api/'
 };
 
 /*

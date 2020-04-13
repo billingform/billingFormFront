@@ -1,0 +1,22 @@
+.modal-header{
+    border-bottom: inherit;
+    background-color: #2B2B3B;
+    .close{
+        color: #e0dfdf;
+    }
+}
+
+.modal-body{
+    text-align: center;
+    color: #e0dfdf;
+    background-color: #2B2B3B;
+}
+
+.modal-footer{
+    border-top: inherit;
+    background-color: #2B2B3B;
+    .group-Btn{
+        margin: auto;
+        button { margin: 3px;}
+    }
+}

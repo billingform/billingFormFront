@@ -1,15 +1,265 @@
-<p-tabView>
-    <p-tabPanel header="Header 1">
-        Content 1
-    </p-tabPanel>
-    <p-tabPanel header="Header 2">
+<p-tabView (onChange)="handleChange($event)">
+    <ngx-spinner type="ball-beat" size="medium" bdColor="rgba(255,255,255, .5)" color="#23AAEE"
+    [fullScreen]="false"></ngx-spinner>
+    <p-tabPanel header="項目設定">
         <ng-template pTemplate="content">
-            Complex Content to Lazy Load
+            <p-table #dt [columns]="colsTab0" styleClass="ui-table-cars" [value]="colsTab0Items" [paginator]="true"
+                [rows]="10" dataKey="name" selectionMode="single" [(selection)]="selected"
+                *ngIf="!isEdit && tabPageNum === 0">
+                <ng-template pTemplate="caption">
+                    設定項目
+                    <div class="ui-table-globalfilter-container">
+                        <input type="text" pInputText size="50" placeholder="Global Filter"
+                            (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:250px;">
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngSwitch]="col.field">
+                            {{col.header}}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                            <input *ngSwitchCase="'isUpdate'" class="ui-column-filter" style="width: 100%; opacity: 0;">
+                            <input *ngSwitchCase="'name'" [(ngModel)]="colsTab0Input.name" type="text"
+                                placeholder="請輸入項目" class="ui-column-filter" style="width: 100%;">
+                            <input *ngSwitchCase="'unit'" [(ngModel)]="colsTab0Input.unit" type="text"
+                                placeholder="請輸入單位" class="ui-column-filter" style="width: 100%;">
+                            <input *ngSwitchCase="'amount'" [(ngModel)]="colsTab0Input.amount" type="number"
+                                placeholder="請輸入金額" class="ui-column-filter" style="width: 100%;">
+                            <input *ngSwitchCase="'remark'" [(ngModel)]="colsTab0Input.remark" type="text"
+                                placeholder="請輸入備註" class="ui-column-filter" style="width: 100%;">
+                        </th>
+                        <th style="width: 8em; text-align: center;">
+                            <button type="button" class="btn btn-warning btn-sm mb-1"
+                                (click)="isEdit = true">編輯</button>
+                            <button type="button" class="btn btn-primary btn-sm" [disabled]="!colsTab0CreateBtn"
+                                (click)="setItems('C')">新增</button>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData" [pEditableRow]="rowData">
+                        <td>
+                            <i *ngIf="rowData.isUpdate">已更動</i>
+                        </td>
+                        <td>{{rowData.name}}</td>
+                        <td>{{rowData.unit}}</td>
+                        <td>{{rowData.amount}}</td>
+                        <td>{{rowData.remark}}</td>
+                        <td style="width: 8em; text-align: center;">
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-table #dt [columns]="colsTab0" [value]="colsTab0Items" *ngIf="isEdit && tabPageNum === 0"
+                styleClass="ui-table-cars" [paginator]="true" [rows]="10">
+                <ng-template pTemplate="caption">
+                    <span class="backPage" (click)="backPage(0)"> < </span>設定項目編輯
+                    <div class="ui-table-globalfilter-container">
+                        <input type="text" pInputText size="50" placeholder="Global Filter"
+                            (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:250px;">
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngSwitch]="col.field">
+                            {{col.header}}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                        <th style="width: 8em; text-align: center;">
+                            <button type="button" class="btn btn-primary btn-sm" (click)="setItems('S')">存擋</button>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="output">
+                                    <p *ngIf="rowData.isUpdate">已更動</p>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="rowData.name">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData.name}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="rowData.unit" required>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData.unit}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="rowData.amount" required>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData.amount}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="rowData.remark" required>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData.remark}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td style="width: 8em; text-align: center;">
+                            <button type="button" class="btn btn-danger btn-sm" (click)="deleteItems(rowData)">刪除</button>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </ng-template>
     </p-tabPanel>
-    <p-tabPanel header="Header 3">
+    <p-tabPanel header="廠商項目">
         <ng-template pTemplate="content">
-            Complex Content to Lazy Load
+            <p-table #dt [columns]="cols" styleClass="ui-table-cars" [value]="cars" [paginator]="true" [rows]="10"
+                dataKey="vin" selectionMode="single" [(selection)]="selected" *ngIf="!isEdit && tabPageNum === 1">
+                <ng-template pTemplate="caption">
+                    List of Cars
+                    <div class="ui-table-globalfilter-container">
+                        <input type="text" pInputText size="50" placeholder="Global Filter"
+                            (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:250px;">
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngSwitch]="col.field">
+                            {{col.header}}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                            <input *ngSwitchCase="'vin'" pInputText type="text" placeholder="Starts with"
+                                class="ui-column-filter" style="width: 100%;">
+                            <input *ngSwitchCase="'year'" pInputText type="text" placeholder="Contains"
+                                class="ui-column-filter" style="width: 100%;">
+                            <p-dropdown *ngSwitchCase="'brand'" [options]="brands" styleClass="ui-column-filter"
+                                [showClear]="true" [style]="{'width':'100%'}" placeholder="Select a Brand">
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                                </ng-template>
+                                <ng-template let-car pTemplate="item">
+                                    <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                                        <div style="font-size:14px;float:right;margin-top:4px">{{car.label}}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                            <p-multiSelect *ngSwitchCase="'color'" [options]="colors" [filter]="false"
+                                styleClass="ui-column-filter" [style]="{'width':'100%'}" defaultLabel="Select a color">
+                            </p-multiSelect>
+                        </th>
+                        <th style="width: 8em; text-align: center;">
+                            <button type="button" class="btn btn-warning btn-sm mb-1"
+                                (click)="isEdit = true">編輯</button>
+                            <button type="button" class="btn btn-primary btn-sm">新增</button>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData" [pEditableRow]="rowData">
+                        <td>{{rowData.vin}}</td>
+                        <td>{{rowData.year}}</td>
+                        <td>
+                            {{rowData.brand}}
+                        </td>
+                        <td>{{rowData.color}}</td>
+                        <td style="width: 8em; text-align: center;">
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-table #dt [columns]="cols" [value]="cars" *ngIf="isEdit && tabPageNum === 1" styleClass="ui-table-cars"
+                [paginator]="true" [rows]="10">
+                <ng-template pTemplate="caption">
+                    List of Cars
+                    <div class="ui-table-globalfilter-container">
+                        <input type="text" pInputText size="50" placeholder="Global Filter"
+                            (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:250px;">
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngSwitch]="col.field">
+                            {{col.header}}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                        <th style="width: 8em; text-align: center;">
+                            <button type="button" class="btn btn-primary btn-sm" (click)="isEdit=false">存擋</button>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="rowData.vin">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData.vin}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="rowData.year" required>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData.year}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="brands" [(ngModel)]="rowData.brand"
+                                        [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData.brand}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="rowData.color">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData.color}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td style="width: 8em; text-align: center;">
+                            <button type="button" class="btn btn-danger btn-sm">刪除</button>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </ng-template>
+    </p-tabPanel>
+    <p-tabPanel header="廠商">
+        <ng-template pTemplate="content">
+            <div *ngIf="tabPageNum === 2">
+                Complex Content to Lazy Load
+            </div>
         </ng-template>
     </p-tabPanel>
 </p-tabView>
+<ngx-snackbar></ngx-snackbar>

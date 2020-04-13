@@ -1,10 +1,16 @@
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SettingRoutingModule } from './setting-routing.module';
 import { SettingComponent } from './setting.component';
 import { FormsModule } from '@angular/forms';
-import {TabViewModule} from 'primeng/tabview';
+import { TabViewModule } from 'primeng/tabview';
+import { TableModule } from 'primeng/table';
+import { DropdownModule } from 'primeng/dropdown';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { SnackbarModule } from 'ngx-snackbar';
 
 
 @NgModule({
@@ -13,7 +19,13 @@ import {TabViewModule} from 'primeng/tabview';
     CommonModule,
     SettingRoutingModule,
     FormsModule,
-    TabViewModule
-  ]
+    TabViewModule,
+    TableModule,
+    DropdownModule,
+    MultiSelectModule,
+    NgxSpinnerModule,
+    SnackbarModule,
+    NgbModule
+  ],
 })
 export class SettingModule { }
