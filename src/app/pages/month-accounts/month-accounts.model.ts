@@ -1,4 +1,4 @@
-export const column= [
+export const column = [
     { field: 'isUpdate', header: '更動' },
     { field: 'name', header: '客戶' },
     { field: 'summary', header: '摘要' },
@@ -12,3 +12,36 @@ export const column= [
     { field: 'method', header: '支付方式' },
     { field: 'penny', header: '零用金' }
 ];
+
+
+
+export interface IColumn {
+    isUpdate: string;
+    name: string;
+    summary: string;
+    amount: string;
+    collection: string;
+    discount: string;
+    spillover: string;
+    state: string;
+    way: string;
+    pay: string;
+    method: string;
+    penny: string;
+}
+
+export class Column implements IColumn {
+    isUpdate: string = '';
+    name: string = '';
+    summary: string = '';
+    amount: string = '';
+    collection: string = '';
+    discount: string = '';
+    spillover: string = '';
+    state: string = '';
+    way: string = '';
+    pay: string = '';
+    method: string = '';
+    penny: string = '';
+
+}

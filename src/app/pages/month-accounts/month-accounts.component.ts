@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Car } from '../setting/setting.component';
-import { column } from './month-accounts.model';
+import { column, Column } from './month-accounts.model';
 
 @Component({
   selector: 'app-month-accounts',
@@ -15,14 +15,9 @@ export class MonthAccountsComponent implements OnInit {
   colors = [];
   isEdit = false;
   colsTab0Items;
-  column=column;
+  column = column;
   colsTab0CreateBtn;
-  createDataInput = {
-    name: '',
-    unit: '',
-    amount: '',
-    remark: ''
-  }
+  createDataInput = new Column();
   selected
   constructor() { }
 
