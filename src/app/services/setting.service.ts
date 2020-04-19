@@ -20,4 +20,8 @@ export class SettingService extends BaseService {
       body: obj
     })
   }
+
+  getCompanies(){
+    return this.get('getCompanySetting');
+  }
 }

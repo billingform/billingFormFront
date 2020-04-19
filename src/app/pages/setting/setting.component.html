@@ -1,6 +1,6 @@
 <p-tabView (onChange)="handleChange($event)">
-    <ngx-spinner type="ball-beat" size="medium" bdColor="rgba(255,255,255, .5)" color="#23AAEE"
-    [fullScreen]="false"></ngx-spinner>
+    <ngx-spinner type="ball-beat" size="medium" bdColor="rgba(255,255,255, .5)" color="#23AAEE" [fullScreen]="false">
+    </ngx-spinner>
     <p-tabPanel header="項目設定">
         <ng-template pTemplate="content">
             <p-table #dt [columns]="colsTab0" styleClass="ui-table-cars" [value]="colsTab0Items" [paginator]="true"
@@ -53,11 +53,12 @@
             <p-table #dt [columns]="colsTab0" [value]="colsTab0Items" *ngIf="isEdit && tabPageNum === 0"
                 styleClass="ui-table-cars" [paginator]="true" [rows]="10">
                 <ng-template pTemplate="caption">
-                    <span class="backPage" (click)="backPage(0)"> < </span>設定項目編輯
-                    <div class="ui-table-globalfilter-container">
-                        <input type="text" pInputText size="50" placeholder="Global Filter"
-                            (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:250px;">
-                    </div>
+                    <span class="backPage" (click)="backPage()">
+                        < </span>設定項目編輯
+                            <div class="ui-table-globalfilter-container">
+                                <input type="text" pInputText size="50" placeholder="Global Filter"
+                                    (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:250px;">
+                            </div>
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
                     <tr>
@@ -120,14 +121,118 @@
                             </p-cellEditor>
                         </td>
                         <td style="width: 8em; text-align: center;">
-                            <button type="button" class="btn btn-danger btn-sm" (click)="deleteItems(rowData)">刪除</button>
+                            <button type="button" class="btn btn-danger btn-sm"
+                                (click)="deleteItems(rowData)">刪除</button>
                         </td>
                     </tr>
                 </ng-template>
             </p-table>
         </ng-template>
     </p-tabPanel>
-    <p-tabPanel header="廠商項目">
+
+    <p-tabPanel header="廠商資料">
+        <ng-template pTemplate="content">
+            <p-table #dt [columns]="colsTab1" styleClass="ui-table-cars" [value]="colsTab1Companies" [paginator]="true" [rows]="10"
+                dataKey="name" selectionMode="single" [(selection)]="selected" *ngIf="!isEdit && tabPageNum === 1">
+                <ng-template pTemplate="caption">
+                    List of Cars
+                    <div class="ui-table-globalfilter-container">
+                        <input type="text" pInputText size="50" placeholder="Global Filter"
+                            (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:250px;">
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngSwitch]="col.field">
+                            {{col.header}}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                            <input *ngSwitchCase="'companyId'" pInputText type="text" placeholder="Starts with"
+                                class="ui-column-filter" style="width: 100%;">
+                            <input *ngSwitchCase="'name'" pInputText type="text" placeholder="Contains"
+                                class="ui-column-filter" style="width: 100%;">
+                            <input *ngSwitchCase="'remark'" pInputText type="text" placeholder="Contains"
+                                class="ui-column-filter" style="width: 100%;">
+                        </th>
+                        <th style="width: 8em; text-align: center;">
+                            <button type="button" class="btn btn-warning btn-sm mb-1"
+                                (click)="isEdit = true">編輯</button>
+                            <button type="button" class="btn btn-primary btn-sm">新增</button>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData" [pEditableRow]="rowData">
+                        <td>{{rowData.companyId}}</td>
+                        <td>{{rowData.name}}</td>
+                        <td>{{rowData.remark}}</td>
+                        <td></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-table #dt [columns]="colsTab1" [value]="colsTab1Companies" *ngIf="isEdit && tabPageNum === 1" styleClass="ui-table-cars"
+                [paginator]="true" [rows]="10">
+                <ng-template pTemplate="caption">
+                    <span class="backPage" (click)="backPage()">
+                        < </span>廠商資料編輯
+                    <div class="ui-table-globalfilter-container">
+                        <input type="text" pInputText size="50" placeholder="Global Filter"
+                            (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:250px;">
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngSwitch]="col.field">
+                            {{col.header}}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                        <th style="width: 8em; text-align: center;">
+                            <button type="button" class="btn btn-primary btn-sm" (click)="isEdit=false">存擋</button>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="rowData.companyId">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData.companyId}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="rowData.name" required>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData.name}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="rowData.remark" required>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData.remark}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td style="width: 8em; text-align: center;">
+                            <button type="button" class="btn btn-danger btn-sm">刪除</button>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </ng-template>
+    </p-tabPanel>
+
+    <!-- Sample
+    <p-tabPanel header="廠商資料">
         <ng-template pTemplate="content">
             <p-table #dt [columns]="cols" styleClass="ui-table-cars" [value]="cars" [paginator]="true" [rows]="10"
                 dataKey="vin" selectionMode="single" [(selection)]="selected" *ngIf="!isEdit && tabPageNum === 1">
@@ -253,8 +358,11 @@
                 </ng-template>
             </p-table>
         </ng-template>
-    </p-tabPanel>
-    <p-tabPanel header="廠商">
+    </p-tabPanel> -->
+
+
+
+    <p-tabPanel header="廠商項目">
         <ng-template pTemplate="content">
             <div *ngIf="tabPageNum === 2">
                 Complex Content to Lazy Load

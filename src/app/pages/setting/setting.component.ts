@@ -1,6 +1,6 @@
 import { SettingService } from './../../services/setting.service';
 import { Component, OnInit, OnDestroy, AfterContentChecked } from '@angular/core';
-import { ColsTab0, ColsTab0Items, ColTab0 } from './setting.model';
+import { ColsTab0, ColsTab0Items, ColTab0, ColsTab1Companies, ColsTab1, ColTab1 } from './setting.model';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SnackbarService } from 'ngx-snackbar';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -16,12 +16,12 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
   selected: any;
   isEdit = false;
   tabPageNum = 0;
+  isDelete = false;
 
   // Tab0
   colsTab0Items: ColsTab0Items[];
   colsTab0ItemsDefault: ColsTab0Items[];
   colsTab0CreateBtn = false;
-  isDelete = false;
   colsTab0 = ColsTab0;
   colTab0 = ColTab0;
   colsTab0Input = {
@@ -31,8 +31,20 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
     remark: ''
   }
 
+  // Tab1
+  colsTab1Companies: ColsTab1Companies[];
+  colsTab1CompaniesDefault: ColsTab1Companies[];
+  colsTab1CreateBtn = false;
+  colsTab1 = ColsTab1;
+  colTab1 = ColTab1;
+  colsTab1Input = {
+    companyId: '',
+    name: '',
+    remark: ''
+  }
 
-  // Tab2
+
+  // Sample
   cars: Car[];
   cols: any[];
   brands = [];
@@ -53,6 +65,8 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
   ngAfterContentChecked() {
     this.colsTab0CreateBtn = !!this.colsTab0Input.name && !!this.colsTab0Input.unit
       && !!parseInt(this.colsTab0Input.amount);
+    this.colsTab1CreateBtn = !!this.colsTab0Input.name && !!this.colsTab0Input.unit
+      && !!parseInt(this.colsTab0Input.amount);
   }
 
   ngOnDestroy() {
@@ -68,8 +82,8 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
     this.changesTab(this.tabPageNum);
   }
 
-  backPage(pageNum){
-    this.changesTab(pageNum);
+  backPage() {
+    this.isEdit = false;
   }
 
   changesTab(pageNum) {
@@ -78,7 +92,7 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
         this.getItems();
         break;
       case pageNum === 1:
-        this.getFalseTabData();
+        this.getCompanies();
         break;
     }
   }
@@ -100,11 +114,12 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
         this.comparisonUpdateData(this.colsTab0ItemsDefault, this.colsTab0Items, this.colTab0);
         return (this.isEdit && !this.colsTab0Items.every(i => i.isUpdate === false)) || this.isDelete
       case pageNum === 1:
-
-        break;
+        this.comparisonUpdateData(this.colsTab1CompaniesDefault, this.colsTab1Companies, this.colTab1);
+        return (this.isEdit && !this.colsTab1Companies.every(i => i.isUpdate === false)) || this.isDelete
     }
   }
 
+  // tab0 start
   getItems() {
     this.spinner.show();
     this.settingService.getItem().subscribe((resp: ColsTab0Items[]) => {
@@ -161,8 +176,22 @@ export class SettingComponent implements OnInit, AfterContentChecked, OnDestroy 
     const index = this.colsTab0Items.findIndex(i => i.name === data.name);
     this.colsTab0Items.splice(index, 1)
     this.colsTab0ItemsDefault = JSON.parse(JSON.stringify(this.colsTab0Items));
-    this.isDelete  = true;
+    this.isDelete = true;
   }
+  // tab0 end
+
+  // tab1 start
+  getCompanies() {
+    this.spinner.show();
+    this.settingService.getCompanies().subscribe((resp: ColsTab1Companies[]) => {
+      this.colsTab1Companies = resp;
+      this.colsTab1CompaniesDefault = JSON.parse(JSON.stringify(this.colsTab1Companies));
+      this.isEdit = false;
+      this.isDelete = false;
+      this.spinner.hide();
+    })
+  }
+
 
   openPopup(pageNum) {
     const modalRef = this.modalService.open(ConfirmPopupComponent);

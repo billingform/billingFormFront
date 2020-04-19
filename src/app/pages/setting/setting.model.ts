@@ -15,3 +15,18 @@ export interface ColsTab0Items {
     remark: string;
     isUpdate: boolean;
 }
+
+export const ColsTab1 = [
+    { field: 'companyId', header: '公司行號' },
+    { field: 'name', header: '公司名稱' },
+    { field: 'remark', header: '備註' },
+];
+
+export const ColTab1 = ['companyId', 'name', 'remark'];
+
+export interface ColsTab1Companies{
+    companyId: string;
+    name: string;
+    remark: string;
+    isUpdate: boolean;
+}
